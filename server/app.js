@@ -1,22 +1,16 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db');
-
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' }); // Optional redundancy
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
-// Middleware
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Routes
 // Example route
 app.get('/', (req, res) => {
-  res.send('🚀 QuickHire API is live');
+  res.send('Welcome to QuickHire API!');
 });
 
 module.exports = app;
