@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './Navbar.css';
+import axios from 'axios';
 
-function SignupForm({ formData, handleInputChange, handleSubmit }) {    //http://localhost:5000/api/auth/signup
+function SignupForm({ formData, handleInputChange, handleSubmit }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -13,8 +15,41 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {    //http:/
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setErrorMessage(''); 
+
+    const { name, email, password, confirmPassword } = formData;
+
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/signup', {
+        name,
+        email,
+        password,
+      });
+      console.log('Signup successful:', response.data);
+      handleSubmit(e);
+    } catch (error) {
+      console.error('Signup failed:', error);
+    
+      setErrorMessage(
+        error.response?.data?.message || 'Signup failed. Please try again.'
+      );
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="modal-form">
+    <form onSubmit={handleSignup} className="modal-form">
+      {errorMessage && (
+        <div className="error-message" style={{ color: 'red', marginBottom: '10px' }}>
+          {errorMessage}
+        </div>
+      )}
       <div className="form-group">
         <label htmlFor="name">Name</label>
         <div className="input-wrapper">
