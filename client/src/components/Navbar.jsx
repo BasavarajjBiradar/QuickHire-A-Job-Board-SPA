@@ -79,7 +79,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
           <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
             <li><a href="#home" onClick={toggleMenu}>Home</a></li>
             <li><a href="#jobs" onClick={toggleMenu}>Jobs</a></li>
-            <li><a href="#companies" onClick={toggleMenu}>Companies</a></li>
+            <li><a href="/company" onClick={toggleMenu}>Companies</a></li>
             <li><a href="#resources" onClick={toggleMenu}>Resources</a></li>
             <li className="auth-container">
               <button className="auth-button" onClick={handleAuth}>
