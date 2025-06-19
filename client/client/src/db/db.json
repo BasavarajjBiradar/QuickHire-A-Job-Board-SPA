@@ -1,0 +1,22 @@
+{
+  "loans": [
+    {
+      "id": 1,
+      "customer": "John Doeas",
+      "amount": 5000,
+      "interestRate": 5.25
+    },
+    {
+      "id": 2,
+      "customer": "Jane Smith",
+      "amount": 8000,
+      "interestRate": 4.75
+    },
+    {
+      "id": 3,
+      "customer": "Alice Johnson",
+      "amount": 10000,
+      "interestRate": 6
+    }
+  ]
+}

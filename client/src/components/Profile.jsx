@@ -14,7 +14,6 @@ function Profile({ isLoggedIn, setIsLoggedIn }) {
 
   return (
     <>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <div className="profile-container">
         <div className="profile-header">
           <h1 className="profile-title">User Profile</h1>

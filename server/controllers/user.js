@@ -1,12 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
-const { signupUser, loginUser } = require('../controllers/authController');
-
-<<<<<<< HEAD
-router.post('/signup', signupUser);
-router.post('/login', loginUser);
 
 const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -16,21 +11,20 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // decoded contains { id, iat, exp }
+    req.user = decoded; 
     next();
   } catch (err) {
     res.status(401).json({ success: false, error: 'Unauthorized access' });
   }
 };
 
-// GET /api/auth/user - Fetch user data (name, email)
 router.get('/user', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password'); // Exclude password
+    const user = await User.findById(req.user.id).select('-password');
     if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
-    res.status(200).json({
+    res.json({
       success: true,
       user: {
         id: user._id,
@@ -45,9 +39,4 @@ router.get('/user', authMiddleware, async (req, res) => {
   }
 });
 
-=======
-router.post('/signup', signupUser);   //localhost:5000/api/auth/signup
-router.post('/login', loginUser);      //localhost:5000/api/auth/login
- 
->>>>>>> 0aba18a52b4ad42da873a99ac2d4ae71f4750873
 module.exports = router;

@@ -77,15 +77,12 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
         <div className="navbar-container">
           <a href="/" className="logo">Quick Hire</a>
           <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-            <li><a href="#home" onClick={toggleMenu}>Home</a></li>
+            <li><a href="/" onClick={toggleMenu}>Home</a></li>
             <li><a href="#jobs" onClick={toggleMenu}>Jobs</a></li>
             <li><a href="#companies" onClick={toggleMenu}>Companies</a></li>
             <li><a href="#resources" onClick={toggleMenu}>Resources</a></li>
             <li className="auth-container">
-              <button className="auth-button" onClick={handleAuth}>
-                {isLoggedIn ? 'Logout' : 'Login'}
-              </button>
-              {isLoggedIn && (
+               {isLoggedIn && (
                 <button
                   className="profile-button"
                   onClick={() => {
@@ -96,6 +93,10 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   Profile
                 </button>
               )}
+              <button className="auth-button" onClick={handleAuth}>
+                {isLoggedIn ? 'Logout' : 'Login'}
+              </button>
+             
             </li>
           </ul>
           <div className={`menu-toggle ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
