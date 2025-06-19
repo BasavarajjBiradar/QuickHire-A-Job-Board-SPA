@@ -1,17 +1,16 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User = require('../models/User');
+const User = require("../models/User");
 
-const { signupUser, loginUser } = require('../controllers/authController');
+const { signupUser, loginUser } = require("../controllers/authController");
 
-<<<<<<< HEAD
-router.post('/signup', signupUser);
-router.post('/login', loginUser);
+router.post("/signup", signupUser);
+router.post("/login", loginUser);
 
 const authMiddleware = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  const token = req.header("Authorization")?.replace("Bearer ", "");
   if (!token) {
-    return res.status(401).json({ success: false, error: 'No token provided' });
+    return res.status(401).json({ success: false, error: "No token provided" });
   }
 
   try {
@@ -19,16 +18,16 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded; // decoded contains { id, iat, exp }
     next();
   } catch (err) {
-    res.status(401).json({ success: false, error: 'Unauthorized access' });
+    res.status(401).json({ success: false, error: "Unauthorized access" });
   }
 };
 
 // GET /api/auth/user - Fetch user data (name, email)
-router.get('/user', authMiddleware, async (req, res) => {
+router.get("/user", authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password'); // Exclude password
+    const user = await User.findById(req.user.id).select("-password"); // Exclude password
     if (!user) {
-      return res.status(404).json({ success: false, error: 'User not found' });
+      return res.status(404).json({ success: false, error: "User not found" });
     }
     res.status(200).json({
       success: true,
@@ -40,14 +39,9 @@ router.get('/user', authMiddleware, async (req, res) => {
       error: null,
     });
   } catch (err) {
-    console.error('Error fetching user:', err);
-    res.status(500).json({ success: false, error: 'Server error' });
+    console.error("Error fetching user:", err);
+    res.status(500).json({ success: false, error: "Server error" });
   }
 });
 
-=======
-router.post('/signup', signupUser);   //localhost:5000/api/auth/signup
-router.post('/login', loginUser);      //localhost:5000/api/auth/login
- 
->>>>>>> 0aba18a52b4ad42da873a99ac2d4ae71f4750873
 module.exports = router;
