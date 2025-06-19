@@ -4,35 +4,48 @@ import axios from 'axios';
 function LoginForm({ formData, handleInputChange, handleSubmit }) {    //http://localhost:5000/api/auth/login
   const [showPassword, setShowPassword] = useState(false);
 
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleAuth = async(e) => {
-    const { email, password } = formData;
+ const handleAuth = async (e) => {
+ // e.preventDefault(); // Prevent default form submission
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      console.log('Login successful:', response.data);
-    } catch (error) {
-      console.error('Login failed:', error);
+  const { email, password } = formData;
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/login', {
+      email,
+      password
+    });
+
+    console.log('Login successful:', response.data);
+
+    // If token is returned, store in localStorage or cookies
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
     }
 
-  };
+    // Call optional prop function (parent can handle redirect, etc.)
+    if (handleSubmit) {
+      handleSubmit(response.data);
+    }
+
+  } catch (error) {
+    console.error('Login failed:', error.response?.data || error.message);
+    alert(error.response?.data?.message || 'Login failed');
+  }
+};
 
   useEffect(() => {
-    const passwordInput = document.getElementById('password');
-    if (showPassword) {
-      passwordInput.type = 'text';
-    } else {
-      passwordInput.type = 'password';
-    }
-  }, [showPassword]);
+   
+  }, []);
 
 
 
   return (
-    <form onSubmit={handleSubmit} className="modal-form">
+    <form onSubmit={handleAuth} className="modal-form">
       <div className="form-group">
         <label htmlFor="email">Email</label>
         <div className="input-wrapper">
