@@ -15,6 +15,10 @@
     "concurrently": "^9.1.2"
   },
   "dependencies": {
+<<<<<<< HEAD
     "nodemon": "^3.1.10"
+=======
+    "axios": "^1.10.0"
+>>>>>>> 6800b3dcfb2acf78259b39b9ff753fe461acfa5c
   }
 }
