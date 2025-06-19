@@ -1,8 +1,47 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { signupUser, loginUser } = require('../controllers/authController');
+const User = require("../models/User");
 
-router.post('/signup', signupUser);   //localhost:5000/api/auth/signup
-router.post('/login', loginUser);      //localhost:5000/api/auth/login
- 
+const { signupUser, loginUser } = require("../controllers/authController");
+
+router.post("/signup", signupUser);
+router.post("/login", loginUser);
+
+const authMiddleware = (req, res, next) => {
+  const token = req.header("Authorization")?.replace("Bearer ", "");
+  if (!token) {
+    return res.status(401).json({ success: false, error: "No token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // decoded contains { id, iat, exp }
+    next();
+  } catch (err) {
+    res.status(401).json({ success: false, error: "Unauthorized access" });
+  }
+};
+
+// GET /api/auth/user - Fetch user data (name, email)
+router.get("/user", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password"); // Exclude password
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+    res.status(200).json({
+      success: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+      error: null,
+    });
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).json({ success: false, error: "Server error" });
+  }
+});
+
 module.exports = router;

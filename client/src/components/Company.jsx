@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-//import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from './Navbar';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Company = ({isLoggedIn, setIsLoggedIn}) => {
     const [jobs, setJobs] = useState([]);
@@ -30,7 +29,6 @@ const Company = ({isLoggedIn, setIsLoggedIn}) => {
 
     return (
         <>
-            <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
             <div className="container">
                 <h2>Companies</h2>
                 <div className="company-list">

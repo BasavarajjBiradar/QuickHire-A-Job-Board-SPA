@@ -4,31 +4,40 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import Company from "./components/Company";
+import Home from "./components/Home";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <div>
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Routes>
         <Route
           path="/"
           element={
-            <div className="home-container">
-              <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-            </div>
+            <Home
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+            />
           }
         />
         <Route
           path="/dashboard"
           element={
-            <Dashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            <Dashboard
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+            />
           }
         />
         <Route
           path="/profile"
           element={
-            <Profile isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            <Profile
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+            />
           }
         />
           <Route
