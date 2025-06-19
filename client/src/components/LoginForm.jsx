@@ -1,51 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Navbar.css';
 import axios from 'axios';
-function LoginForm({ formData, handleInputChange, handleSubmit }) {    //http://localhost:5000/api/auth/login
-  const [showPassword, setShowPassword] = useState(false);
 
-  
+function LoginForm({ formData, handleInputChange, handleSubmit }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
- const handleAuth = async (e) => {
- // e.preventDefault(); // Prevent default form submission
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setErrorMessage(''); 
 
-  const { email, password } = formData;
+    const { email, password } = formData;
 
-  try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', {
-      email,
-      password
-    });
-
-    console.log('Login successful:', response.data);
-
-    // If token is returned, store in localStorage or cookies
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      console.log('Login successful:', response.data);
+      handleSubmit(e);
+    } catch (error) {
+      console.error('Login failed:', error);
+      setErrorMessage(
+        error.response?.data?.message || 'Invalid email or password. Please try again.'
+      );
     }
-
-    // Call optional prop function (parent can handle redirect, etc.)
-    if (handleSubmit) {
-      handleSubmit(response.data);
-    }
-
-  } catch (error) {
-    console.error('Login failed:', error.response?.data || error.message);
-    alert(error.response?.data?.message || 'Login failed');
-  }
-};
-
-  useEffect(() => {
-   
-  }, []);
-
-
+  };
 
   return (
     <form onSubmit={handleAuth} className="modal-form">
+      {errorMessage && (
+        <div className="error-message" style={{ color: 'red', marginBottom: '10px' }}>
+          {errorMessage}
+        </div>
+      )}
       <div className="form-group">
         <label htmlFor="email">Email</label>
         <div className="input-wrapper">
