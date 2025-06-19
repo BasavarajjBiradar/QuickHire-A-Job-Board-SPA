@@ -39,7 +39,7 @@ const signupUser = async (req, res) => {
       email,
       password: hashedPassword
     });
-    await newUser.save();
+    await newUser.save();  //saves to database
 
     // Create JWT
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {

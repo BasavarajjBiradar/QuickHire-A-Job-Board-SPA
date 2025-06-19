@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 
 // Example route
-app.get('/', (req, res) => {
+app.get('/', (req, res) => {          
   res.send('Welcome to QuickHire API!');
 });
 
