@@ -1,12 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Navbar.css';
-
-function LoginForm({ formData, handleInputChange, handleSubmit }) {
+import axios from 'axios';
+function LoginForm({ formData, handleInputChange, handleSubmit }) {    //http://localhost:5000/api/auth/login
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleAuth = async(e) => {
+    const { email, password } = formData;
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      console.log('Login successful:', response.data);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+
+  };
+
+  useEffect(() => {
+    const passwordInput = document.getElementById('password');
+    if (showPassword) {
+      passwordInput.type = 'text';
+    } else {
+      passwordInput.type = 'password';
+    }
+  }, [showPassword]);
+
+
 
   return (
     <form onSubmit={handleSubmit} className="modal-form">

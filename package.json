@@ -3,16 +3,18 @@
   "version": "1.0.0",
   "description": "a MERN-based job board application that allows users to post jobs, view listings, apply to jobs, and filter/search through listings, all within a responsive and intuitive interface.",
   "main": "index.js",
- "scripts": {
-  "client": "npm start --prefix client",
-  "server": "npm start --prefix server",
-  "dev": "concurrently \"npm run server\" \"npm run client\""
-},
-
+  "scripts": {
+    "client": "npm start --prefix client",
+    "server": "npm start --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "axios": "^1.10.0"
   }
 }

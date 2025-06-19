@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 
-function SignupForm({ formData, handleInputChange, handleSubmit }) {
+function SignupForm({ formData, handleInputChange, handleSubmit }) {    //http://localhost:5000/api/auth/signup
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
