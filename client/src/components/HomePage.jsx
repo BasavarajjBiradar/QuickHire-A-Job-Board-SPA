@@ -53,8 +53,8 @@ const HomePage = () => {
   }, []);
 
   const handlePostJob = () => navigate('/jobpost');
-  const handleSearchJobs = () => navigate('/job');
-  const handleViewAll = () => navigate('/job');
+  const handleSearchJobs = () => navigate('/jobs');
+  const handleViewAll = () => navigate('/jobs');
 
   return (
     <div className="homepage">

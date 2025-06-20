@@ -1,11 +1,11 @@
 const Job = require('../models/job');
 
 // Create a new job (POST)
+// controllers/jobpostControllers.js
 exports.createJob = async (req, res) => {
   try {
     const { title, Company, Location, Description } = req.body;
 
-    // Optional manual validation
     if (!title || !Company || !Location || !Description) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
@@ -14,8 +14,8 @@ exports.createJob = async (req, res) => {
       title,
       Company,
       Location,
-      Description
-      // createdAt is automatically set by schema
+      Description,
+      postedBy: req.user._id,  // associate job with the logged-in user
     });
 
     res.status(201).json({ success: true, data: newJob });
@@ -23,6 +23,7 @@ exports.createJob = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
 
 // Get all jobs (GET)
 exports.getAllJobs = async (req, res) => {

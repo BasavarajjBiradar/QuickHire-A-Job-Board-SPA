@@ -2,9 +2,12 @@
 const express = require('express');
 const router = express.Router();
 const jobController = require('../controllers/jobpostControllers');
+const protect = require('../middlewares/authMiddleware');
+
 
 // Route paths WITHOUT /jobs
-router.post('/', jobController.createJob);
+// routes/jobpostroute.js
+router.post('/', protect, jobController.createJob);
 router.get('/', jobController.getAllJobs);
 router.get('/:id', jobController.getJobById);
 router.put('/:id', jobController.updateJob);
