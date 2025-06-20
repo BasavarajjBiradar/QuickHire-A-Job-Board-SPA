@@ -3,9 +3,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
+// Allowed roles
+const validRoles = ['user', 'recruiter'];
+
 // Signup Controller
 const signupUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, roles } = req.body;
 
   // Basic validation
   if (!name || !email || !password) {
@@ -16,34 +19,46 @@ const signupUser = async (req, res) => {
     return res.status(400).json({ message: 'Invalid email format' });
   }
 
-  // Strong password validation
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
   if (!passwordRegex.test(password)) {
     return res.status(400).json({
-      message: 'Password must be at least 6 characters long, contain one uppercase letter, one number, and one special character'
+      message:
+        'Password must be at least 6 characters long, contain one uppercase letter, one number, and one special character',
     });
   }
 
-  try {
-    // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: 'Email already registered' });
+  // Validate roles if provided
+  let assignedRoles = ['user'];
+  if (roles) {
+    if (!Array.isArray(roles)) {
+      return res.status(400).json({ message: 'Roles must be an array' });
+    }
+    const isValid = roles.every((r) => validRoles.includes(r));
+    if (!isValid) {
+      return res.status(400).json({ message: 'Invalid role(s) provided' });
+    }
+    assignedRoles = roles;
+  }
 
-    // Hash password
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser)
+      return res.status(400).json({ message: 'Email already registered' });
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Save user
     const newUser = new User({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      roles: assignedRoles,
     });
-    await newUser.save();  //saves to database
 
-    // Create JWT
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h'
+    await newUser.save();
+
+    const token = jwt.sign({ id: newUser._id, roles: newUser.roles }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
     });
 
     res.status(201).json({
@@ -51,15 +66,16 @@ const signupUser = async (req, res) => {
       user: {
         id: newUser._id,
         name: newUser.name,
-        email: newUser.email
-      }
+        email: newUser.email,
+        roles: newUser.roles,
+      },
     });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// Login Controller 
+// Login Controller
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password)
@@ -70,10 +86,11 @@ const loginUser = async (req, res) => {
     if (!user) return res.status(400).json({ message: 'User does not exist' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!isMatch)
+      return res.status(400).json({ message: 'Invalid credentials' });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h'
+    const token = jwt.sign({ id: user._id, roles: user.roles }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
     });
 
     res.json({
@@ -81,8 +98,9 @@ const loginUser = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
-      }
+        email: user.email,
+        roles: user.roles,
+      },
     });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
