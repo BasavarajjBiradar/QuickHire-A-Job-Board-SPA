@@ -20,13 +20,13 @@ function App() {
 
       <Routes>
         <Route
-          path="/job"
-          element={
-            <Job
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            />
-          }
+          path="/jobs" element={<Job />} 
+          // element={
+          //   // <Job
+          //   //   isLoggedIn={isLoggedIn}
+          //   //   setIsLoggedIn={setIsLoggedIn}
+          //   // />
+          
         />
         <Route
           path="/"
@@ -67,7 +67,7 @@ function App() {
             <Contact />
           }
         />
-        <Route
+          <Route
           path="/jobpost"
           element={
             <JobPost />
