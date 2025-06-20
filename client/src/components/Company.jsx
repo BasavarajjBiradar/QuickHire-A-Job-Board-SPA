@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Company = ({isLoggedIn, setIsLoggedIn}) => {
+const Company = ({ isLoggedIn, setIsLoggedIn }) => {
     const [jobs, setJobs] = useState([]);
     const [companies, setCompanies] = useState([]);
     const [filteredJobs, setFilteredJobs] = useState([]);

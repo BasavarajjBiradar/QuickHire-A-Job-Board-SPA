@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
+import axios from 'axios';
 
 const HomePage = () => {
-  const jobPosts = [
-    { title: 'Frontend Developer', company: 'TechSoft', location: 'Remote' },
-    { title: 'Backend Engineer', company: 'DataLink', location: 'Bangalore' },
-    { title: 'Product Designer', company: 'CreateHub', location: 'Mumbai' },
-  ];
-
+  const [latestJobs, setLatestJobs] = useState([]);
   const navigate = useNavigate();
+  const fetchJobs = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/jobs');
+      const jobsArray = res.data.data || res.data; // depending on structure
+      console.log('API response:', res.data);
+
+
+      if (Array.isArray(jobsArray)) {
+        const sorted = jobsArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setLatestJobs(sorted.slice(0, 3));
+      } else {
+        console.error('Unexpected response format:', res.data);
+      }
+    } catch (error) {
+      console.error('Error fetching job posts:', error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   const handlePostJob = () => {
     navigate('/job');
@@ -17,6 +35,10 @@ const HomePage = () => {
 
   const handleSearchJobs = () => {
     navigate('/company');
+  };
+
+  const handleViewAll = () => {
+    navigate('/job');
   };
 
   return (
@@ -27,7 +49,7 @@ const HomePage = () => {
         <div className="slide">Hire Top Talent</div>
       </section>
 
-      {/* Job Poster / Job Seeker Section */}
+      {/* Job Poster / Seeker */}
       <section className="user-section">
         <div className="job-poster">
           <h3>Are you a Job Poster?</h3>
@@ -41,20 +63,24 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Job Cards Section */}
+      {/* Latest Jobs from DB */}
       <section className="job-cards">
         <h2>Latest Job Posts</h2>
         <div className="card-container">
-          {jobPosts.map((job, index) => (
-            <div className="card" key={index}>
+          {latestJobs.map((job) => (
+            <div className="card" key={job._id}>
               <h4>{job.title}</h4>
-              <p><strong>{job.company}</strong></p>
-              <p>{job.location}</p>
-              <button>Apply Now</button>
+              <p><strong>{job.Company}</strong></p>
+              <p>{job.Location}</p>
+              <button onClick={() => navigate(`/job/${job._id}`)}>Apply Now</button>
             </div>
           ))}
         </div>
+        <button className="view-all-btn" onClick={() => navigate('/job')}>
+          View All Jobs
+        </button>
       </section>
+
     </div>
   );
 };

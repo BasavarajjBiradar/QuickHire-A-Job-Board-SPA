@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setLogin } from '../redux/authSlice';
 
 function LoginForm({ formData, handleInputChange, handleSubmit }) {
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -18,6 +21,8 @@ function LoginForm({ formData, handleInputChange, handleSubmit }) {
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const userData = response.data.user; // Make sure your backend sends `user` object
+      dispatch(setLogin(userData)); // Store in Redux
       console.log('Login successful:', response.data);
       handleSubmit(e);
     } catch (error) {

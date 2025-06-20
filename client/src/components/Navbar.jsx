@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
+import { useSelector } from 'react-redux';
 
 function Navbar({ isLoggedIn, setIsLoggedIn }) {
+  const user = useSelector((state) => state.auth.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
