@@ -1,34 +1,26 @@
-const express = require('express');
-const cors = require('cors');
-
-const jobRoutes = require('./routes/jobpostroute');
-require('dotenv').config({ path: __dirname + '/.env' });
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 const app = express();
-
-
-
-
-const authRoutes = require('./routes/authRoutes');
-
-
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use('/api/auth', authRoutes);
 
-// Example route
+// Routes
+const authRoutes = require("./routes/authRoutes");
+const jobRoutes = require("./routes/jobpostroute");
+const applicationRoutes = require("./routes/applicationRoute");
 
-app.use(cors());
-app.use(express.json()); 
+app.use("/api/auth", authRoutes);
+app.use("/api/jobs", jobRoutes);
+app.use("/api", applicationRoutes);
 
-
-app.use('/jobs', jobRoutes); 
-
-
-app.get('/', (req, res) => {
-  res.send('Welcome to QuickHire API!');
+// Root route
+app.get("/", (req, res) => {
+  res.send("Welcome to QuickHire API!");
 });
 
 module.exports = app;

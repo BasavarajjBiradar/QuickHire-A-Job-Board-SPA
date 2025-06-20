@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
-import Company from "./components/Company";
 import Home from "./components/Home";
 
 function App() {
@@ -38,12 +37,6 @@ function App() {
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
             />
-          }
-        />
-          <Route
-          path="/company"
-          element={
-            <Company/>
           }
         />
       </Routes>
