@@ -14,8 +14,9 @@ function App() {
 
   return (
     <div>
-
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+
+
       <Routes>
         <Route
           path="/job"
@@ -26,7 +27,7 @@ function App() {
             />
           }
         />
-         <Route
+        <Route
           path="/"
           element={
             <HomePage
@@ -62,11 +63,11 @@ function App() {
         <Route
           path="/contact"
           element={
-            <Contact/>
+            <Contact />
           }
         />
-        </Routes>
-              <Footer/>
+      </Routes>
+      <Footer />
 
     </div>
   );

@@ -1,7 +1,7 @@
 const app = require('./app');
 const connectDB = require('./config/db');
 
-// Start MongoDB connection first
+// Connect to MongoDB
 connectDB();
 
 // Start server
