@@ -8,6 +8,7 @@ import Company from "./components/Company";
 import Job from "./components/Job";
 import Footer from "./components/Footer";
 import Contact from "./components/Contact";
+import JobPost from "./components/JobPost";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -64,6 +65,12 @@ function App() {
           path="/contact"
           element={
             <Contact />
+          }
+        />
+        <Route
+          path="/jobpost"
+          element={
+            <JobPost />
           }
         />
       </Routes>

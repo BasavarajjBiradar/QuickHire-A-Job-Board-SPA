@@ -30,11 +30,11 @@ const HomePage = () => {
   }, []);
 
   const handlePostJob = () => {
-    navigate('/job');
+    navigate('/jobpost');
   };
 
   const handleSearchJobs = () => {
-    navigate('/company');
+    navigate('/job');
   };
 
   const handleViewAll = () => {

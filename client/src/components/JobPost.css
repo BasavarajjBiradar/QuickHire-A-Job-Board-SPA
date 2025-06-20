@@ -1,0 +1,93 @@
+.jobpost-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 40px 30px;
+  background: linear-gradient(135deg, #ffffff, #f0f4ff);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.jobpost-container h2 {
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #007bff, #00c6ff, #00e1ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+  letter-spacing: 1px;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+.highlight {
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.jobpost-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.jobpost-form label {
+  font-weight: 600;
+  margin: 10px 0 6px;
+  color: #1a1a2e;
+}
+
+.jobpost-form input,
+.jobpost-form textarea {
+  padding: 12px;
+  border: 1px solid #dce3f0;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.jobpost-form input:focus,
+.jobpost-form textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.jobpost-form button {
+  margin-top: 20px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #28a745, #34d058);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.jobpost-form button:hover {
+  background: linear-gradient(90deg, #218838, #2eb74c);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(40, 167, 69, 0.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
