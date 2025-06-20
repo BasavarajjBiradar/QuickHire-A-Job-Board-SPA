@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
+// SearchBar component
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -17,13 +18,14 @@ const SearchBar = ({ onSearch }) => {
         placeholder="Search jobs by title, company, or skill..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
       />
       <button onClick={handleSearch}>Search</button>
     </div>
   );
 };
 
+// FilterGroup component
 const FilterGroup = ({ label, options, onChange, value }) => (
   <div className="filter-group">
     <select value={value} onChange={(e) => onChange(e.target.value)}>
@@ -38,6 +40,7 @@ const FilterGroup = ({ label, options, onChange, value }) => (
   </div>
 );
 
+// JobCard component
 const JobCard = ({ job, index }) => (
   <div className="job-card" style={{ animationDelay: `${index * 0.1}s` }}>
     <h3>{job.title}</h3>
@@ -53,6 +56,7 @@ const JobCard = ({ job, index }) => (
   </div>
 );
 
+// Main Job Component
 const Job = () => {
   const [allJobs, setAllJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
@@ -65,23 +69,28 @@ const Job = () => {
   });
 
   const [searchParams] = useSearchParams();
-  const initialCompany = searchParams.get('company');
+  const navigate = useNavigate();
 
+  // Fetch jobs on mount
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/jobs');
         if (res.data.success) {
-          setAllJobs(res.data.data);
-          setFilteredJobs(res.data.data);
+          const jobs = res.data.data;
+          setAllJobs(jobs);
+          console.log('Fetched jobs:', jobs);
 
-          // Apply initial company filter from query param
-          if (initialCompany) {
-            setFilters((prev) => ({
-              ...prev,
-              company: initialCompany
-            }));
-          }
+          // Get URL filters
+          const newFilters = {
+            company: searchParams.get('company') || '',
+            location: searchParams.get('location') || '',
+            experience: searchParams.get('experience') || '',
+            jobType: searchParams.get('jobType') || '',
+            role: searchParams.get('role') || ''
+          };
+          setFilters(newFilters);
+          applyFilters(jobs, newFilters);
         }
       } catch (error) {
         console.error('Failed to fetch jobs:', error);
@@ -89,44 +98,67 @@ const Job = () => {
     };
 
     fetchJobs();
-  }, []);
+  }, []); // only on mount
 
+  // Apply filters when filters change
   useEffect(() => {
-    applyFilters();
+    applyFilters(allJobs, filters);
+    updateURLParams(filters);
   }, [filters]);
 
+  // Search handler
   const handleSearch = (searchTerm) => {
     const lowerSearch = searchTerm.toLowerCase();
-    const filtered = allJobs.filter((job) =>
+    const searched = allJobs.filter((job) =>
       job.title.toLowerCase().includes(lowerSearch) ||
       job.Company.toLowerCase().includes(lowerSearch) ||
       job.Description.toLowerCase().includes(lowerSearch)
     );
-    applyFilters(filtered);
+    applyFilters(searched, filters);
   };
 
-  const applyFilters = (jobs = allJobs) => {
-    let result = jobs;
-    if (filters.location) {
-      result = result.filter((job) => job.Location === filters.location);
+  // Apply filters
+  const applyFilters = (jobs, activeFilters) => {
+    let result = [...jobs];
+
+    if (activeFilters.location) {
+      result = result.filter(job => job.Location === activeFilters.location);
     }
-    if (filters.experience) {
-      result = result.filter((job) => job.experience === filters.experience);
+    if (activeFilters.experience) {
+      result = result.filter(job => job.experience === activeFilters.experience);
     }
-    if (filters.jobType) {
-      result = result.filter((job) => job.jobType === filters.jobType);
+    if (activeFilters.jobType) {
+      result = result.filter(job => job.jobType === activeFilters.jobType);
     }
-    if (filters.company) {
-      result = result.filter((job) => job.Company === filters.company);
+    if (activeFilters.company) {
+      result = result.filter(job => job.Company === activeFilters.company);
     }
-    if (filters.role) {
-      result = result.filter((job) => job.title === filters.role);
+    if (activeFilters.role) {
+      result = result.filter(job => job.title === activeFilters.role);
     }
+
     setFilteredJobs(result);
   };
 
+  // Update state + URL when filter dropdown changes
   const handleFilterChange = (filterName, value) => {
-    setFilters((prev) => ({ ...prev, [filterName]: value }));
+    const updatedFilters = { ...filters, [filterName]: value };
+    setFilters(updatedFilters);
+  };
+
+  // Update the URL query string
+  const updateURLParams = (filtersObj) => {
+    const params = new URLSearchParams();
+    Object.entries(filtersObj).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+    });
+    navigate(`/jobs?${params.toString()}`);
+  };
+
+  // Get unique values for filter dropdowns
+  const getUniqueOptions = (key) => {
+    const options = [...new Set(allJobs.map(job => job[key]))];
+    return options.filter(Boolean).map(item => ({ value: item, label: item }));
   };
 
   return (
@@ -136,27 +168,29 @@ const Job = () => {
           <SearchBar onSearch={handleSearch} />
         </div>
       </header>
+
       <div className="container">
         <div className="filters">
           <FilterGroup
             label="Locations"
-            options={[...new Set(allJobs.map((job) => job.Location))].map((loc) => ({ value: loc, label: loc }))}
+            options={getUniqueOptions('Location')}
             value={filters.location}
-            onChange={(value) => handleFilterChange('location', value)}
+            onChange={(val) => handleFilterChange('location', val)}
           />
           <FilterGroup
             label="Companies"
-            options={[...new Set(allJobs.map((job) => job.Company))].map((comp) => ({ value: comp, label: comp }))}
+            options={getUniqueOptions('Company')}
             value={filters.company}
-            onChange={(value) => handleFilterChange('company', value)}
+            onChange={(val) => handleFilterChange('company', val)}
           />
           <FilterGroup
             label="Roles"
-            options={[...new Set(allJobs.map((job) => job.title))].map((role) => ({ value: role, label: role }))}
+            options={getUniqueOptions('title')}
             value={filters.role}
-            onChange={(value) => handleFilterChange('role', value)}
+            onChange={(val) => handleFilterChange('role', val)}
           />
         </div>
+
         <div className="job-listings">
           {filteredJobs.length > 0 ? (
             filteredJobs.map((job, index) => (

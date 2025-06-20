@@ -21,9 +21,14 @@ function LoginForm({ formData, handleInputChange, handleSubmit }) {
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      const userData = response.data.user; // Make sure your backend sends `user` object
-      dispatch(setLogin(userData)); // Store in Redux
+
+      const userData = response.data.user;
+      const token = response.data.token;
+
+      localStorage.setItem('token', token);         // ✅ Store token
+      dispatch(setLogin(userData));                 // ✅ Set Redux user
       console.log('Login successful:', response.data);
+
       handleSubmit(e);
     } catch (error) {
       console.error('Login failed:', error);

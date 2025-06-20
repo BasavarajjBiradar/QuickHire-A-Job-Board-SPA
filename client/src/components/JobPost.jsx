@@ -14,12 +14,40 @@ function JobPost() {
     setJobData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Job posted successfully!");
-    console.log(jobData);
-    // Future: send this to backend with fetch or axios
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem('token'); // or wherever you store JWT
+
+  const jobPayload = {
+    Company: jobData.organization,
+    title: jobData.title,
+    Location: jobData.location,
+    Description: jobData.description,
   };
+
+  try {
+    const response = await fetch('http://localhost:5000/api/jobs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(jobPayload),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert("Job posted successfully!");
+      console.log(result.data);
+    } else {
+      alert("Failed: " + result.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error posting job");
+  }
+};
+
 
   return (
     <div className="jobpost-container">
