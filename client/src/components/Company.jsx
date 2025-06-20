@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import 'bootstrap/dist/css/bootstrap.min.css';
 import './Company.css';
 
 const Company = () => {
@@ -28,55 +27,48 @@ const Company = () => {
   const companyDetails = {
     Techtrix: {
       logo: '/assets/techtrixlogo.png',
-      description: 'Techtrix is an innovative software solutions company delivering scalable tech for modern businesses.'
+      description: 'Techtrix delivers scalable software solutions for modern enterprises.'
     },
     India: {
       logo: 'https://via.placeholder.com/150?text=India+Tech',
-      description: 'India Tech is a rising tech hub providing end-to-end IT and consulting services across industries.'
+      description: 'India Tech offers end-to-end IT and consulting services.'
     },
     Technova: {
       logo: '/assets/technovalogo.png',
-      description: 'Technova focuses on digital transformation, offering smart solutions in AI, cloud, and enterprise tech.'
+      description: 'Technova leads in AI, cloud, and digital transformation.'
     },
     Wipro: {
       logo: '/assets/wiprologo.png',
-      description: 'Wipro is a globally recognized technology services and consulting company, delivering innovation-led strategies and business solutions across industries.'
+      description: 'Wipro is a global leader in technology consulting and services.'
     },
     Amazon: {
       logo: '/assets/amazonlogo.png',
-      description: 'Amazon is a global tech giant specializing in e-commerce, cloud computing, digital streaming, and AI.'
+      description: 'Amazon innovates in e-commerce, cloud computing, and AI.'
     }
   };
 
   return (
-    <div className="container py-5">
-      <div className="text-center mb-5">
-        <h1 className="page-heading">Explore Jobs by Top Companies</h1>
-        <p className="lead text-muted">Select a company to view its job opportunities</p>
+    <div className="company-container">
+      <div className="heading-highlight">
+        <h1 className="heading-title">🌟 Explore Jobs by <span>Top Companies</span></h1>
+        <p className="heading-subtitle">🔍 Discover opportunities at leading employers and take your career to new heights.</p>
       </div>
 
-      <div className="row g-3 mb-5">
+      <div className="company-grid">
         {companies.map(company => (
-          <div key={company} className="col-sm-6 col-md-4 col-lg-3">
-            <div className="card h-100 shadow company-card">
-              <img
-                src={companyDetails[company]?.logo}
-                alt={`${company} logo`}
-                className="card-img-top"
-              />
-              <div className="card-body d-flex flex-column">
-                <h6 className="card-title">{company}</h6>
-                <p className="card-text text-muted" style={{ fontSize: '0.85rem', minHeight: '60px' }}>
-                  {companyDetails[company]?.description || 'This company provides excellent career opportunities.'}
-                </p>
-                <button
-                  className="view-jobs-btn mt-auto"
-                  onClick={() => handleCompanyClick(company)}
-                >
-                  View Jobs
-                </button>
-              </div>
-            </div>
+          <div key={company} className="company-card">
+            <img
+              src={companyDetails[company]?.logo}
+              alt={`${company} logo`}
+              className="company-logo"
+            />
+            <h3 className="company-name">{company}</h3>
+            <p className="company-desc">
+              {companyDetails[company]?.description || 'This company provides excellent career opportunities.'}
+            </p>
+            <button className="view-jobs-btn" onClick={() => handleCompanyClick(company)}>
+              View Jobs
+            </button>
           </div>
         ))}
       </div>
