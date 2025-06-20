@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import axios from 'axios';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom'; // Added Link
 
 // SearchBar component
 const SearchBar = ({ onSearch }) => {
@@ -52,7 +52,7 @@ const JobCard = ({ job, index }) => (
     <div className="tags">
       <span className="tag">{job.Location}</span>
     </div>
-    <a href="#" className="apply-btn">Apply Now</a>
+    <Link to={`/job/${job._id}`} className="apply-btn">Apply Now</Link>
   </div>
 );
 
