@@ -60,7 +60,7 @@ const Contact = () => {
                     <a href="#"><i className="fab fa-instagram"></i></a>
                 </div>
                 <div className="social-images">
-                    {/* <img src={contactImg} alt="Contact Banner" /> */}
+                    <img className="social-image" src={contactImg} alt="Contact Banner" /> 
                     {/* C:\Wipro_project\QuickHire-A-Job-Board-SPA\client\Assets\contactimg.jpg */}
 
                 </div>

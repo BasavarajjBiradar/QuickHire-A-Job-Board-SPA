@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 import axios from 'axios';
+  import { useDispatch } from 'react-redux';
+import { setLogin } from '../redux/authSlice';
 
 function SignupForm({ formData, handleInputChange, handleSubmit }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,34 +17,76 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setErrorMessage('');
+  // const handleSignup = async (e) => {
+  //   e.preventDefault();
+  //   setErrorMessage('');
 
-    const { name, email, password, confirmPassword, role } = formData;
+  //   const { name, email, password, confirmPassword, role } = formData;
 
-    if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match.');
-      return;
-    }
+  //   if (password !== confirmPassword) {
+  //     setErrorMessage('Passwords do not match.');
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', {
-        name,
-        email,
-        password,
-        roles: [role], // Must be array as per schema
-      });
+  //   try {
+  //     const response = await axios.post('http://localhost:5000/api/auth/signup', {
+  //       name,
+  //       email,
+  //       password,
+  //       roles: [role], // Must be array as per schema
+  //     });
 
-      console.log('Signup successful:', response.data);
-      handleSubmit(e);
-    } catch (error) {
-      console.error('Signup failed:', error);
-      setErrorMessage(
-        error.response?.data?.message || 'Signup failed. Please try again.'
-      );
-    }
-  };
+  //     console.log('Signup successful:', response.data);
+  //     handleSubmit(e);
+  //   } catch (error) {
+  //     console.error('Signup failed:', error);
+  //     setErrorMessage(
+  //       error.response?.data?.message || 'Signup failed. Please try again.'
+  //     );
+  //   }
+  // };
+
+
+const dispatch = useDispatch(); // inside component
+
+const handleSignup = async (e) => {
+  e.preventDefault();
+  setErrorMessage('');
+
+  const { name, email, password, confirmPassword, role } = formData;
+
+  if (password !== confirmPassword) {
+    setErrorMessage('Passwords do not match.');
+    return;
+  }
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/signup', {
+      name,
+      email,
+      password,
+      roles: [role],
+    });
+
+    const { token, user } = response.data;
+
+    const userData = {
+      token,
+      ...user,
+    };
+
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    dispatch(setLogin(userData));
+    handleSubmit(e);
+  } catch (error) {
+    console.error('Signup failed:', error);
+    setErrorMessage(
+      error.response?.data?.message || 'Signup failed. Please try again.'
+    );
+  }
+};
+
 
   return (
     <form onSubmit={handleSignup} className="modal-form">

@@ -16,6 +16,7 @@ function Navbar() {
   const [isSignup, setIsSignup] = useState(false);
 
   const [formData, setFormData] = useState({
+
     name: '',
     email: '',
     password: '',
@@ -53,35 +54,61 @@ function Navbar() {
     });
   };
 
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   if (isSignup) {
+  //     if (formData.password !== formData.confirmPassword) {
+  //       alert('Passwords do not match!');
+  //       return;
+  //     }
+  //   }
+
+  //   const userData = {
+
+  //     name: formData.name || 'Guest',
+  //     email: formData.email,
+  //     role: formData.role || 'user',
+  //   };
+  //   console.log('dispatchhhh',userData)
+
+  //   dispatch(setLogin(userData));
+  //   localStorage.setItem('user', JSON.stringify(userData));
+
+  //   if (userData.role === 'recruiter') {
+  //     navigate('/dashboard');
+  //   } else {
+  //     navigate('/');
+  //   }
+
+  //   resetForm();
+  //   setIsModalOpen(false);
+  //   setIsMenuOpen(false);
+  // };
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (isSignup) {
-      if (formData.password !== formData.confirmPassword) {
-        alert('Passwords do not match!');
-        return;
-      }
+    // Get full user info from Redux or localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+
+    if (!storedUser) {
+      alert('Login/Signup failed. Please try again.');
+      return;
     }
 
-    const userData = {
-      name: formData.name || 'Guest',
-      email: formData.email,
-      role: formData.role || 'user',
-    };
+    // Navigate based on role
+    if (storedUser.roles?.includes('recruiter')) {
+  navigate('/dashboard');
+} else {
+  navigate('/');
+}
 
-    dispatch(setLogin(userData));
-    localStorage.setItem('user', JSON.stringify(userData));
-
-    if (userData.role === 'recruiter') {
-      navigate('/dashboard');
-    } else {
-      navigate('/');
-    }
 
     resetForm();
     setIsModalOpen(false);
     setIsMenuOpen(false);
   };
+
 
   const handleLogout = () => {
     dispatch(setLogout());
@@ -99,14 +126,29 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="navbar-container">
-          <a href="/" className="logo">Quick Hire</a>
+          <a href="/" className="logo">
+          <img src="logo.png" className='logoimg' alt="Quick Hire Logo" />
+          Quick Hire</a>
           <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
             <li><a href="/" onClick={toggleMenu}>Home</a></li>
             <li><a href="/jobs" onClick={toggleMenu}>Jobs</a></li>
             <li><a href="/company" onClick={toggleMenu}>Companies</a></li>
-            <li><a href="#resources" onClick={toggleMenu}>Resources</a></li>
+            {/* <li><a href="#resources" onClick={toggleMenu}>Resources</a></li> */}
             <li className="auth-container">
-              {isLoggedIn && user?.role === 'user' && (
+              {isLoggedIn && user?.roles?.includes('recruiter') && (
+  <button
+    className="profile-button"
+    onClick={() => {
+      navigate('/dashboard');
+      if (isMenuOpen) setIsMenuOpen(false);
+    }}
+  >
+    Dashboard
+  </button>
+)}
+
+              {isLoggedIn && user?.roles?.includes('user') && (
+
                 <button
                   className="profile-button"
                   onClick={() => {

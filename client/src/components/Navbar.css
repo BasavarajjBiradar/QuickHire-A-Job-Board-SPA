@@ -26,6 +26,9 @@ body {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* replaces margin-right */
   color: #ffffff;
   font-size: 1.8rem;
   font-weight: 700;
@@ -33,6 +36,7 @@ body {
   letter-spacing: 0.5px;
   position: relative;
   transition: color 0.3s ease;
+  
 }
 
 .logo::after {
@@ -55,6 +59,7 @@ body {
 }
 
 .nav-links {
+  align-items: center;
   list-style: none;
   display: flex;
   gap: 2.5rem;
@@ -96,9 +101,10 @@ body {
 .auth-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+  margin-left: auto;
 }
-
+.profile-button,
 .auth-button {
   background: #10b981;
   color: #ffffff;
@@ -111,6 +117,21 @@ body {
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+
+
+/* .auth-button {
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+} */
 
 .auth-button:hover {
   background: #059669;
@@ -605,6 +626,12 @@ body {
   appearance: none;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.logoimg{
+  margin-right: 8px;
+  width: 50px;
+  height: 40px;
 }
 
 .form-group select:focus {

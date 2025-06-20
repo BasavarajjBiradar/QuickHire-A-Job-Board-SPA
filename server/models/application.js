@@ -4,12 +4,12 @@ const applicationSchema = new mongoose.Schema(
   {
     userid: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "User", 
       required: [true, "User ID is required"],
     },
     jobid: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "jobpostdb",
+      ref: "Job", 
       required: [true, "Job ID is required"],
     },
     appliedAt: {
@@ -23,11 +23,10 @@ const applicationSchema = new mongoose.Schema(
     },
   },
   {
-    collection: "applied",
+    collection: "applied", // You can keep this as is
   }
 );
 
-// Prevent duplicate applications
 applicationSchema.index({ userid: 1, jobid: 1 }, { unique: true });
 
 module.exports = mongoose.model("Application", applicationSchema);

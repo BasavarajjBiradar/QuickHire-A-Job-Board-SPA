@@ -13,31 +13,62 @@ function LoginForm({ formData, handleInputChange, handleSubmit }) {
     setShowPassword(!showPassword);
   };
 
+  // const handleAuth = async (e) => {
+  //   e.preventDefault();
+  //   setErrorMessage('');
+
+  //   const { email, password } = formData;
+
+  //   try {
+  //     const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+
+  //     const userData = response.data.user;
+  //     const token = response.data.token;
+
+  //     localStorage.setItem('token', token);         // ✅ Store token
+  //     dispatch(setLogin(userData)); 
+  //     console.log('User:', userData)                // ✅ Set Redux user
+  //     console.log('Login successful:', response.data);
+
+  //     handleSubmit(e);
+  //   } catch (error) {
+  //     console.error('Login failed:', error);
+  //     setErrorMessage(
+  //       error.response?.data?.message || 'Invalid email or password. Please try again.'
+  //     );
+  //   }
+  // };
   const handleAuth = async (e) => {
-    e.preventDefault();
-    setErrorMessage('');
+  e.preventDefault();
+  setErrorMessage('');
 
-    const { email, password } = formData;
+  const { email, password } = formData;
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/login', {
+      email,
+      password,
+    });
 
-      const userData = response.data.user;
-      const token = response.data.token;
+    const { token, user } = response.data;
 
-      localStorage.setItem('token', token);         // ✅ Store token
-      dispatch(setLogin(userData)); 
-      console.log('User:', userData)                // ✅ Set Redux user
-      console.log('Login successful:', response.data);
+    const userData = {
+      token,
+      ...user, // includes id, name, email, roles
+    };
 
-      handleSubmit(e);
-    } catch (error) {
-      console.error('Login failed:', error);
-      setErrorMessage(
-        error.response?.data?.message || 'Invalid email or password. Please try again.'
-      );
-    }
-  };
+    localStorage.setItem('token', token); // Store token separately if needed
+    localStorage.setItem('user', JSON.stringify(userData)); // Store full user info
+    dispatch(setLogin(userData)); // ✅ store in Redux
+    handleSubmit(e);
+  } catch (error) {
+    console.error('Login failed:', error);
+    setErrorMessage(
+      error.response?.data?.message || 'Invalid email or password. Please try again.'
+    );
+  }
+};
+
 
   return (
     <form onSubmit={handleAuth} className="modal-form">

@@ -1,0 +1,71 @@
+.profile-container {
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.profile-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.profile-title {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.applied-jobs-section {
+    margin-top: 20px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+.no-jobs {
+    color: #777;
+    font-style: italic;
+}
+
+.job-cards-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.job-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+}
+
+.job-title {
+    font-size: 1.3rem;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.job-company {
+    font-weight: bold;
+    color: #555;
+}
+
+.job-desc {
+    color: #666;
+    font-size: 0.95rem;
+    margin: 8px 0;
+}
+
+.job-date {
+    color: #999;
+    font-size: 0.85rem;
+}

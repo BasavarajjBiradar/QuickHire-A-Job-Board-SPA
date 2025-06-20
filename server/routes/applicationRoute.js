@@ -12,7 +12,8 @@ router.post("/applications", async (req, res) => {
     }
 
     const user = await mongoose.model("User").findById(userid);
-    const job = await mongoose.model("jobpostdb").findById(jobid);
+const job = await mongoose.model("Job").findById(jobid);
+console.log(user, job)
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });

@@ -14,6 +14,8 @@ import JobDetails from './components/JobDetails';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+
+  
   return (
     <div>
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
@@ -42,8 +44,8 @@ function App() {
           path="/dashboard"
           element={
             <Dashboard
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
+              // isLoggedIn={isLoggedIn}
+              // setIsLoggedIn={setIsLoggedIn}
             />
           }
         />

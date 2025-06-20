@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import './Dashboard.css';
 
-function Dashboard({ isLoggedIn, setIsLoggedIn }) {
+function Dashboard() {
   const navigate = useNavigate();
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !user?.roles?.includes('recruiter')) {
       navigate('/');
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, user, navigate]);
 
   const jobs = [
     {
