@@ -17,9 +17,9 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setErrorMessage(''); 
+    setErrorMessage('');
 
-    const { name, email, password, confirmPassword } = formData;
+    const { name, email, password, confirmPassword, role } = formData;
 
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match.');
@@ -31,12 +31,13 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {
         name,
         email,
         password,
+        roles: [role], // Must be array as per schema
       });
+
       console.log('Signup successful:', response.data);
       handleSubmit(e);
     } catch (error) {
       console.error('Signup failed:', error);
-    
       setErrorMessage(
         error.response?.data?.message || 'Signup failed. Please try again.'
       );
@@ -50,6 +51,8 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {
           {errorMessage}
         </div>
       )}
+
+      {/* Name */}
       <div className="form-group">
         <label htmlFor="name">Name</label>
         <div className="input-wrapper">
@@ -65,6 +68,8 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {
           />
         </div>
       </div>
+
+      {/* Email */}
       <div className="form-group">
         <label htmlFor="email">Email</label>
         <div className="input-wrapper">
@@ -80,6 +85,25 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {
           />
         </div>
       </div>
+
+      {/* Role */}
+      <div className="form-group">
+        <label htmlFor="role">Role</label>
+        <div className="input-wrapper">
+          <select
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="user">User</option>
+            <option value="recruiter">Recruiter</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Password */}
       <div className="form-group">
         <label htmlFor="password">Password</label>
         <div className="input-wrapper">
@@ -100,6 +124,8 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {
           ></button>
         </div>
       </div>
+
+      {/* Confirm Password */}
       <div className="form-group">
         <label htmlFor="confirmPassword">Confirm Password</label>
         <div className="input-wrapper">
@@ -120,6 +146,7 @@ function SignupForm({ formData, handleInputChange, handleSubmit }) {
           ></button>
         </div>
       </div>
+
       <button type="submit" className="modal-submit-button">
         Sign Up
       </button>

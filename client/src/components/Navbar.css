@@ -593,3 +593,28 @@ body {
 .view-all-btn:hover {
   background-color: #005fa3;
 }
+
+.form-group select {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #f7fafc;
+  outline: none;
+  appearance: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-group select:focus {
+  border-color: #10b981;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.form-group select option {
+  background: #ffffff;
+  color: #111827;
+  padding: 0.5rem;
+}

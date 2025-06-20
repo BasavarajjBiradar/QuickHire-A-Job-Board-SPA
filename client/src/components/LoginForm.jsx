@@ -26,7 +26,8 @@ function LoginForm({ formData, handleInputChange, handleSubmit }) {
       const token = response.data.token;
 
       localStorage.setItem('token', token);         // ✅ Store token
-      dispatch(setLogin(userData));                 // ✅ Set Redux user
+      dispatch(setLogin(userData)); 
+      console.log('User:', userData)                // ✅ Set Redux user
       console.log('Login successful:', response.data);
 
       handleSubmit(e);

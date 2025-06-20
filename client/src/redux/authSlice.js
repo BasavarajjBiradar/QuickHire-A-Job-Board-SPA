@@ -1,9 +1,12 @@
 // src/redux/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
+// Try to load user from localStorage
+const savedUser = JSON.parse(localStorage.getItem('user'));
+
 const initialState = {
-  user: null,
-  isLoggedIn: false,
+  user: savedUser || null,
+  isLoggedIn: !!savedUser,
 };
 
 const authSlice = createSlice({
@@ -13,10 +16,12 @@ const authSlice = createSlice({
     setLogin(state, action) {
       state.user = action.payload;
       state.isLoggedIn = true;
+      localStorage.setItem('user', JSON.stringify(action.payload));
     },
     setLogout(state) {
       state.user = null;
       state.isLoggedIn = false;
+      localStorage.removeItem('user');
     },
   },
 });

@@ -1,71 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setLogin, setLogout } from '../redux/authSlice';
 
-function Navbar({ isLoggedIn, setIsLoggedIn }) {
-  const user = useSelector((state) => state.auth.user);
+function Navbar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
+    role: 'user',
   });
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      dispatch(setLogin(storedUser));
+    }
+  }, [dispatch]);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
     setIsSignup(false);
-    setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+    resetForm();
   };
 
   const toggleForm = () => {
     setIsSignup(!isSignup);
-    setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+    resetForm();
   };
 
-  const handleAuth = (e) => {
-    e.preventDefault();
-    if (isLoggedIn) {
-      setIsLoggedIn(false);
-      setIsModalOpen(false);
-      if (isMenuOpen) setIsMenuOpen(false);
-      navigate('/');
-    } else {
-      setIsModalOpen(true);
-    }
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      role: 'user',
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (isSignup) {
       if (formData.password !== formData.confirmPassword) {
-        alert("Passwords do not match!");
+        alert('Passwords do not match!');
         return;
       }
-      console.log("Signup data:", formData);
-      setIsLoggedIn(true);
-      setIsModalOpen(false);
-      setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+    }
+
+    const userData = {
+      name: formData.name || 'Guest',
+      email: formData.email,
+      role: formData.role || 'user',
+    };
+
+    dispatch(setLogin(userData));
+    localStorage.setItem('user', JSON.stringify(userData));
+
+    if (userData.role === 'recruiter') {
       navigate('/dashboard');
     } else {
-      console.log("Login data:", { email: formData.email, password: formData.password });
-      setIsLoggedIn(true);
-      setIsModalOpen(false);
-      setFormData({ name: '', email: '', password: '', confirmPassword: '' });
-      navigate('/dashboard');
+      navigate('/');
     }
-    if (isMenuOpen) setIsMenuOpen(false);
+
+    resetForm();
+    setIsModalOpen(false);
+    setIsMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    localStorage.removeItem('user');
+    navigate('/');
+    setIsMenuOpen(false);
   };
 
   const handleInputChange = (e) => {
@@ -84,7 +106,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
             <li><a href="/company" onClick={toggleMenu}>Companies</a></li>
             <li><a href="#resources" onClick={toggleMenu}>Resources</a></li>
             <li className="auth-container">
-              {isLoggedIn && (
+              {isLoggedIn && user?.role === 'user' && (
                 <button
                   className="profile-button"
                   onClick={() => {
@@ -95,10 +117,9 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   Profile
                 </button>
               )}
-              <button className="auth-button" onClick={handleAuth}>
+              <button className="auth-button" onClick={isLoggedIn ? handleLogout : toggleModal}>
                 {isLoggedIn ? 'Logout' : 'Login'}
               </button>
-
             </li>
           </ul>
           <div className={`menu-toggle ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
@@ -112,9 +133,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal">
-            <button className="modal-close" onClick={toggleModal}>
-              ×
-            </button>
+            <button className="modal-close" onClick={toggleModal}>×</button>
             <h2 className="modal-title">{isSignup ? 'Sign Up' : 'Login'}</h2>
             {isSignup ? (
               <SignupForm
@@ -131,7 +150,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
             )}
             <p className="modal-toggle">
               {isSignup ? 'Already have an account?' : "Don't have an account?"}
-              <button type="button" onClick={toggleForm} className="modal-toggle-button">
+              <button onClick={toggleForm} className="modal-toggle-button">
                 {isSignup ? 'Login' : 'Sign Up'}
               </button>
             </p>
