@@ -12,7 +12,7 @@ function LoginForm({ formData, handleInputChange, handleSubmit }) {
 
   const handleAuth = async (e) => {
     e.preventDefault();
-    setErrorMessage(''); 
+    setErrorMessage('');
 
     const { email, password } = formData;
 
