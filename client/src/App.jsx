@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import Home from "./components/Home";
+import HomePage from "./components/HomePage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,7 +16,7 @@ function App() {
         <Route
           path="/"
           element={
-            <Home
+            <HomePage
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
             />
