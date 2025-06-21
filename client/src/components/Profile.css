@@ -68,6 +68,32 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+.job-status {
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-top: 5px;
+  width: fit-content;
+  font-size: 14px;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-accepted {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+
 .section-title {
   font-size: 1.8rem;
   margin-bottom: 20px;
@@ -103,12 +129,15 @@ body {
 .profile-container.dark .job-card .job-title {
   color: #ffffff;
 }
+
 .profile-container.dark .job-card .job-company {
   color: #bbbbff;
 }
+
 .profile-container.dark .job-card .job-desc {
   color: #dddddd;
 }
+
 .profile-container.dark .job-card .job-date {
   color: #aaa;
 }
@@ -116,12 +145,15 @@ body {
 .profile-container.light .job-card .job-title {
   color: #1a1a1a;
 }
+
 .profile-container.light .job-card .job-company {
   color: #444488;
 }
+
 .profile-container.light .job-card .job-desc {
   color: #333;
 }
+
 .profile-container.light .job-card .job-date {
   color: #666;
 }
@@ -158,6 +190,7 @@ body {
     opacity: 0;
     transform: translateY(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -169,6 +202,7 @@ body {
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -180,6 +214,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

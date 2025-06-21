@@ -24,7 +24,7 @@ function Profile() {
       try {
         const userId = user?._id || user?.id;
         const res = await axios.get(`http://localhost:5000/api/applications/user/${userId}`);
-        setAppliedJobs(res.data);
+        setAppliedJobs(res.data.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching applied jobs:", error);
@@ -35,17 +35,20 @@ function Profile() {
     fetchAppliedJobs();
   }, [isLoggedIn, user, navigate]);
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'accepted': return 'status-accepted';
+      case 'rejected': return 'status-rejected';
+      default: return 'status-pending';
+    }
+  };
+
   if (loading) return <div className={`loading ${darkMode ? 'dark' : 'light'}`}>Loading...</div>;
 
   return (
     <div className={`profile-container ${darkMode ? 'light' : 'dark'}`}>
       <div className="profile-header">
         <h1 className="profile-title">Welcome, {user?.name || 'User'}!</h1>
-        <div className="toggle-wrapper">
-          {/* <button onClick={() => setDarkMode(!darkMode)} className="dark-toggle">
-            {darkMode ? ' Light Mode' : ' Dark Mode'}
-          </button> */}
-        </div>
       </div>
 
       <div className="applied-jobs-section">
@@ -63,6 +66,9 @@ function Profile() {
                 </p>
                 <p className="job-date">
                   Applied on: {new Date(jobApp.appliedAt).toLocaleDateString()}
+                </p>
+                <p className={`job-status ${getStatusColor(jobApp.status)}`}>
+                  {jobApp.status.toUpperCase()}
                 </p>
               </div>
             ))}

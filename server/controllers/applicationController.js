@@ -1,56 +1,47 @@
-const Application = require('../models/application');
-const User = require('../models/User');
-const Job = require('../models/job');
+const express = require("express");
+const router = express.Router();
+const Application = require("../models/application");
+const mongoose = require("mongoose");
 
-exports.getAllApplications = async (req, res) => {
+exports.getApplicantsByJob = async (req, res) => {
   try {
-    const applications = await Application.find()
-      .populate('userid', 'name email') // fetch name and email from user
-      .populate('jobid', 'title Company Location'); // fetch job details
+    const { jobId } = req.params;
+
+    const applications = await Application.find({ jobid: jobId })
+      .populate('userid', 'name email')  // show applicant details
+      .lean();
+
+    if (!applications.length) {
+      return res.status(404).json({ message: 'No applications found for this job' });
+    }
 
     res.status(200).json({ success: true, data: applications });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ error: 'Server error', details: error.message });
   }
 };
 
-// @desc    Get application by ID
-// @route   GET /api/applications/:id
-exports.getApplicationById = async (req, res) => {
+exports.updateApplicationStatus = async (req, res) => {
   try {
-    const application = await Application.findById(req.params.id)
-      .populate('userid', 'name email')
-      .populate('jobid', 'title Company Location Description');
+    const { applicationId } = req.params;
+    const { status } = req.body;
 
-    if (!application) {
-      return res.status(404).json({ success: false, message: 'Application not found' });
+    if (!['pending', 'accepted', 'rejected'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
     }
 
-    res.status(200).json({ success: true, data: application });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
+    const updatedApp = await Application.findByIdAndUpdate(
+      applicationId,
+      { status },
+      { new: true }
+    );
 
-// @desc    Apply for a job
-// @route   POST /api/applications
-exports.applyJob = async (req, res) => {
-  try {
-    const { userid, jobid } = req.body;
-
-    const newApplication = new Application({
-      userid,
-      jobid,
-    });
-
-    await newApplication.save();
-
-    res.status(201).json({ success: true, data: newApplication });
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ success: false, message: 'Already applied for this job.' });
+    if (!updatedApp) {
+      return res.status(404).json({ message: 'Application not found' });
     }
 
-    res.status(500).json({ success: false, message: error.message });
+    res.status(200).json({ success: true, data: updatedApp });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error', details: error.message });
   }
 };

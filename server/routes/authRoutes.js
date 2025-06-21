@@ -48,4 +48,24 @@ router.get("/user", authMiddleware, async (req, res) => {
   }
 });
 
+
+router.get('/recruiter/:recruiterId', async (req, res) => {
+  try {
+    const { recruiterId } = req.params;
+
+    const jobs = await Job.find({ postedBy: recruiterId })
+      .populate('postedBy', 'name email roles') // optional, shows recruiter info
+      .sort({ createdAt: -1 });
+
+    if (jobs.length === 0) {
+      return res.status(404).json({ message: 'No jobs found for this recruiter' });
+    }
+
+    res.status(200).json({ success: true, data: jobs });
+  } catch (error) {
+    console.error('Error fetching recruiter jobs:', error);
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+});
+
 module.exports = router;

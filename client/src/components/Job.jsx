@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import axios from 'axios';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // 🔥 Get user from Redux
+import { useSelector } from 'react-redux'; 
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -145,7 +145,7 @@ const Job = () => {
   const handleApply = (jobId) => {
     if (!user) {
       alert("Please login to apply for this job.");
-      navigate('/Login');
+      // navigate('/Login');
       return;
     }
 

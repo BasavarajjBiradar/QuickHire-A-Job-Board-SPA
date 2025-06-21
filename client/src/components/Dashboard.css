@@ -10,6 +10,44 @@
 }
 
 
+.status-tag {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-accepted {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 5px;
+  text-transform: capitalize;
+}
+.status-badge.accepted {
+  background-color: #e0ffe0;
+}
+.status-badge.rejected {
+  background-color: #ffe0e0;
+}
+.status-badge.pending {
+  background-color: #fff4cc;
+}
+
+
 
 .dashboard-subtitle {
   font-size: 1.5rem;

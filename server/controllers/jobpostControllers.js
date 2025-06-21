@@ -79,3 +79,24 @@ exports.deleteJob = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+
+// Get jobs posted by a recruiter
+exports.getJobsByRecruiter = async (req, res) => {
+  try {
+    const { recruiterId } = req.params;
+
+    const jobs = await Job.find({ postedBy: recruiterId })
+      .populate('postedBy', 'name email') // Optional: populate recruiter info
+      .sort({ createdAt: -1 });
+
+    if (!jobs.length) {
+      return res.status(404).json({ success: false, message: "No jobs found for this recruiter" });
+    }
+
+    res.status(200).json({ success: true, data: jobs });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
