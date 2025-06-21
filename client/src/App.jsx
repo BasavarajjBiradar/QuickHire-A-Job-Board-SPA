@@ -11,6 +11,7 @@ import Contact from "./components/Contact";
 import JobPost from "./components/JobPost";
 import JobDetails from './components/JobDetails';
 import LoginForm from "./components/LoginForm";
+import PageNotFound from './components/PageNotFound';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -90,6 +91,7 @@ function App() {
             <JobDetails />
           }
         />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />
 
