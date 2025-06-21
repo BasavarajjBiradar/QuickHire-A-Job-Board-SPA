@@ -10,12 +10,13 @@ import Footer from "./components/Footer";
 import Contact from "./components/Contact";
 import JobPost from "./components/JobPost";
 import JobDetails from './components/JobDetails';
+import LoginForm from "./components/LoginForm";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
-  
+
   return (
     <div>
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
@@ -44,11 +45,18 @@ function App() {
           path="/dashboard"
           element={
             <Dashboard
-              // isLoggedIn={isLoggedIn}
-              // setIsLoggedIn={setIsLoggedIn}
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
             />
           }
         />
+        {/* <Route
+          path="/login"
+          element={
+            <LoginForm
+            />
+          }
+        /> */}
         <Route
           path="/profile"
           element={
@@ -76,12 +84,12 @@ function App() {
             <JobPost />
           }
         />
-        <Route 
-          path="/job/:id" 
+        <Route
+          path="/job/:id"
           element={
             <JobDetails />
-          } 
-          />
+          }
+        />
       </Routes>
       <Footer />
 

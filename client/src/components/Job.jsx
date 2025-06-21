@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import axios from 'axios';
-import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // 🔥 Get user from Redux
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,7 +37,8 @@ const FilterGroup = ({ label, options, onChange, value }) => (
   </div>
 );
 
-const JobCard = ({ job, index }) => (
+// 🔥 Updated JobCard with onApply prop
+const JobCard = ({ job, index, onApply }) => (
   <div className="job-card" style={{ animationDelay: `${index * 0.1}s` }}>
     <h3>{job.title}</h3>
     <div className="company">{job.Company}</div>
@@ -47,9 +49,9 @@ const JobCard = ({ job, index }) => (
     <div className="tags">
       <span className="tag">{job.Location}</span>
     </div>
-    <Link to={`/job/${job._id}`} className="apply-btn">
+    <button className="apply-btn" onClick={() => onApply(job._id)}>
       Apply Now
-    </Link>
+    </button>
   </div>
 );
 
@@ -67,6 +69,7 @@ const Job = () => {
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user); // 🔥 Get user from Redux
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -138,18 +141,22 @@ const Job = () => {
     return options.filter(Boolean).map(item => ({ value: item, label: item }));
   };
 
+  // 🔥 Apply Now Handler
+  const handleApply = (jobId) => {
+    if (!user) {
+      alert("Please login to apply for this job.");
+      navigate('/Login');
+      return;
+    }
+
+    navigate(`/job/${jobId}`);
+  };
+
   return (
     <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <header className="header">
         <div className="container">
           <SearchBar onSearch={handleSearch} />
-          {/* <div className="dark-toggle">
-            <label className="switch">
-              <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(!darkMode)} />
-              <span className="slider"></span>
-            </label>
-            <span>{darkMode ? 'Dark' : 'Light'} Mode</span>
-          </div> */}
         </div>
       </header>
 
@@ -178,7 +185,7 @@ const Job = () => {
         <div className="job-listings">
           {filteredJobs.length > 0 ? (
             filteredJobs.map((job, index) => (
-              <JobCard key={job._id} job={job} index={index} />
+              <JobCard key={job._id} job={job} index={index} onApply={handleApply} />
             ))
           ) : (
             <div className="no-results">No jobs match your selected filters.</div>
