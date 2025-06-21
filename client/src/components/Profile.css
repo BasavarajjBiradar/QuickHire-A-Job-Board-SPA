@@ -1,71 +1,193 @@
+/* Profile.css */
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .profile-container {
-    padding: 40px;
-    max-width: 1200px;
-    margin: auto;
-    font-family: 'Segoe UI', sans-serif;
+  padding: 50px 20px;
+  max-width: 1200px;
+  margin: auto;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.profile-container.dark {
+  background: linear-gradient(to right, #1f1c2c, #928dab);
+  color: #f0f0f0;
+}
+
+.profile-container.light {
+  background: linear-gradient(to right, #e0ecff, #fefefe);
+  color: #1a1a1a;
 }
 
 .profile-header {
-    margin-bottom: 30px;
-    text-align: center;
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .profile-title {
-    font-size: 2.5rem;
-    color: #333;
+  font-size: 2.5rem;
+  font-weight: bold;
+  animation: slideInDown 0.8s ease-out;
+  margin-bottom: 10px;
+}
+
+.toggle-wrapper {
+  text-align: left;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.dark-toggle {
+  background: none;
+  border: 2px solid currentColor;
+  color: inherit;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dark-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .applied-jobs-section {
-    margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 1.2s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .section-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: #444;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 10px;
 }
 
 .no-jobs {
-    color: #777;
-    font-style: italic;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 30px 0;
+  opacity: 0.8;
 }
 
 .job-cards-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
 }
 
 .job-card {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: slideInFade 0.5s ease forwards;
+  opacity: 0;
+}
+
+/* Dark/light text inside cards */
+.profile-container.dark .job-card .job-title {
+  color: #ffffff;
+}
+.profile-container.dark .job-card .job-company {
+  color: #bbbbff;
+}
+.profile-container.dark .job-card .job-desc {
+  color: #dddddd;
+}
+.profile-container.dark .job-card .job-date {
+  color: #aaa;
+}
+
+.profile-container.light .job-card .job-title {
+  color: #1a1a1a;
+}
+.profile-container.light .job-card .job-company {
+  color: #444488;
+}
+.profile-container.light .job-card .job-desc {
+  color: #333;
+}
+.profile-container.light .job-card .job-date {
+  color: #666;
 }
 
 .job-card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
 .job-title {
-    font-size: 1.3rem;
-    color: #222;
-    margin-bottom: 8px;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .job-company {
-    font-weight: bold;
-    color: #555;
+  font-size: 1.1rem;
+  margin: 6px 0;
 }
 
 .job-desc {
-    color: #666;
-    font-size: 0.95rem;
-    margin: 8px 0;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
 }
 
 .job-date {
-    color: #999;
-    font-size: 0.85rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+/* Animations */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 100px;
 }

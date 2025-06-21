@@ -6,25 +6,14 @@ import axios from 'axios';
 const HomePage = () => {
   const [latestJobs, setLatestJobs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
 
   const slides = [
-    {
-      text: "Find Your Dream Job",
-      img: "/assets/slides/slider-1.jpg"
-    },
-    {
-      text: "Hire Top Talent",
-      img: "/assets/slides/slider-2.jpg"
-    },
-    {
-      text: "Apply Anywhere, Anytime",
-      img: "/assets/slides/slider-3.jpg"
-    },
-    {
-      text: "Be a Employed Person",
-      img: "/assets/slides/slider-4.jpg"
-    }
+    { text: "Find Your Dream Job", img: "/assets/slides/slider-1.jpg" },
+    { text: "Hire Top Talent", img: "/assets/slides/slider-2.jpg" },
+    { text: "Apply Anywhere, Anytime", img: "/assets/slides/slider-3.jpg" },
+    { text: "Be a Employed Person", img: "/assets/slides/slider-4.jpg" }
   ];
 
   const fetchJobs = async () => {
@@ -44,11 +33,9 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchJobs();
-
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, 4000);
-
     return () => clearInterval(timer);
   }, []);
 
@@ -57,8 +44,8 @@ const HomePage = () => {
   const handleViewAll = () => navigate('/jobs');
 
   return (
-    <div className="homepage">
-      {/* ✅ Carousel Section */}
+    <div className={`homepage ${isDarkMode ? 'dark' : ''}`}>
+      {/*  Carousel Section */}
       <section className="carousel">
         {slides.map((slide, index) => (
           <div
@@ -72,6 +59,19 @@ const HomePage = () => {
           </div>
         ))}
       </section>
+
+      {/*  Dark Mode Toggle */}
+      <div className="theme-toggle">
+        <label className="switch">
+          <input
+            type="checkbox"
+            checked={isDarkMode}
+            onChange={() => setIsDarkMode(!isDarkMode)}
+          />
+          <span className="slider round"></span>
+        </label>
+        <span>{isDarkMode ? 'Dark Mode' : 'Light Mode'}</span>
+      </div>
 
       {/* Job Poster / Seeker */}
       <section className="user-section">

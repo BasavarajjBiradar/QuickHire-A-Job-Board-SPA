@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import axios from 'axios';
-import { useSearchParams, useNavigate, Link } from 'react-router-dom'; // Added Link
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 
-// SearchBar component
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = () => {
-    onSearch(searchTerm);
-  };
+  const handleSearch = () => onSearch(searchTerm);
 
   return (
     <div className="search-bar">
@@ -25,7 +22,6 @@ const SearchBar = ({ onSearch }) => {
   );
 };
 
-// FilterGroup component
 const FilterGroup = ({ label, options, onChange, value }) => (
   <div className="filter-group">
     <select value={value} onChange={(e) => onChange(e.target.value)}>
@@ -40,7 +36,6 @@ const FilterGroup = ({ label, options, onChange, value }) => (
   </div>
 );
 
-// JobCard component
 const JobCard = ({ job, index }) => (
   <div className="job-card" style={{ animationDelay: `${index * 0.1}s` }}>
     <h3>{job.title}</h3>
@@ -52,11 +47,12 @@ const JobCard = ({ job, index }) => (
     <div className="tags">
       <span className="tag">{job.Location}</span>
     </div>
-    <Link to={`/job/${job._id}`} className="apply-btn">Apply Now</Link>
+    <Link to={`/job/${job._id}`} className="apply-btn">
+      Apply Now
+    </Link>
   </div>
 );
 
-// Main Job Component
 const Job = () => {
   const [allJobs, setAllJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
@@ -67,11 +63,11 @@ const Job = () => {
     company: '',
     role: ''
   });
+  const [darkMode, setDarkMode] = useState(false);
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Fetch jobs on mount
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -79,18 +75,16 @@ const Job = () => {
         if (res.data.success) {
           const jobs = res.data.data;
           setAllJobs(jobs);
-          console.log('Fetched jobs:', jobs);
 
-          // Get URL filters
-          const newFilters = {
+          const urlFilters = {
             company: searchParams.get('company') || '',
             location: searchParams.get('location') || '',
             experience: searchParams.get('experience') || '',
             jobType: searchParams.get('jobType') || '',
             role: searchParams.get('role') || ''
           };
-          setFilters(newFilters);
-          applyFilters(jobs, newFilters);
+          setFilters(urlFilters);
+          applyFilters(jobs, urlFilters);
         }
       } catch (error) {
         console.error('Failed to fetch jobs:', error);
@@ -98,55 +92,39 @@ const Job = () => {
     };
 
     fetchJobs();
-  }, []); // only on mount
+  }, []);
 
-  // Apply filters when filters change
   useEffect(() => {
     applyFilters(allJobs, filters);
     updateURLParams(filters);
   }, [filters]);
 
-  // Search handler
   const handleSearch = (searchTerm) => {
-    const lowerSearch = searchTerm.toLowerCase();
-    const searched = allJobs.filter((job) =>
-      job.title.toLowerCase().includes(lowerSearch) ||
-      job.Company.toLowerCase().includes(lowerSearch) ||
-      job.Description.toLowerCase().includes(lowerSearch)
+    const lower = searchTerm.toLowerCase();
+    const matched = allJobs.filter((job) =>
+      job.title.toLowerCase().includes(lower) ||
+      job.Company.toLowerCase().includes(lower) ||
+      job.Description.toLowerCase().includes(lower)
     );
-    applyFilters(searched, filters);
+    applyFilters(matched, filters);
   };
 
-  // Apply filters
   const applyFilters = (jobs, activeFilters) => {
     let result = [...jobs];
 
-    if (activeFilters.location) {
-      result = result.filter(job => job.Location === activeFilters.location);
-    }
-    if (activeFilters.experience) {
-      result = result.filter(job => job.experience === activeFilters.experience);
-    }
-    if (activeFilters.jobType) {
-      result = result.filter(job => job.jobType === activeFilters.jobType);
-    }
-    if (activeFilters.company) {
-      result = result.filter(job => job.Company === activeFilters.company);
-    }
-    if (activeFilters.role) {
-      result = result.filter(job => job.title === activeFilters.role);
-    }
+    if (activeFilters.location) result = result.filter(j => j.Location === activeFilters.location);
+    if (activeFilters.experience) result = result.filter(j => j.experience === activeFilters.experience);
+    if (activeFilters.jobType) result = result.filter(j => j.jobType === activeFilters.jobType);
+    if (activeFilters.company) result = result.filter(j => j.Company === activeFilters.company);
+    if (activeFilters.role) result = result.filter(j => j.title === activeFilters.role);
 
     setFilteredJobs(result);
   };
 
-  // Update state + URL when filter dropdown changes
-  const handleFilterChange = (filterName, value) => {
-    const updatedFilters = { ...filters, [filterName]: value };
-    setFilters(updatedFilters);
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
   };
 
-  // Update the URL query string
   const updateURLParams = (filtersObj) => {
     const params = new URLSearchParams();
     Object.entries(filtersObj).forEach(([key, value]) => {
@@ -155,17 +133,23 @@ const Job = () => {
     navigate(`/jobs?${params.toString()}`);
   };
 
-  // Get unique values for filter dropdowns
   const getUniqueOptions = (key) => {
     const options = [...new Set(allJobs.map(job => job[key]))];
     return options.filter(Boolean).map(item => ({ value: item, label: item }));
   };
 
   return (
-    <div className="app">
+    <div className={`app ${darkMode ? 'dark-mode' : ''}`}>
       <header className="header">
         <div className="container">
           <SearchBar onSearch={handleSearch} />
+          {/* <div className="dark-toggle">
+            <label className="switch">
+              <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(!darkMode)} />
+              <span className="slider"></span>
+            </label>
+            <span>{darkMode ? 'Dark' : 'Light'} Mode</span>
+          </div> */}
         </div>
       </header>
 

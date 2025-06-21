@@ -1,34 +1,45 @@
 .homepage {
-  font-family: sans-serif;
-  margin-top: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom right, #f9f9ff, #eaf4ff);
+  color: #2c3e50;
+  padding: 0;
+  margin: 0;
+  animation: fadeInPage 1s ease-in-out;
+}
+
+@keyframes fadeInPage {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .carousel {
   position: relative;
-  display: flex;
-  width: 100%;
-  height: 300px;
+  height: 420px;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 0;
 }
 
 .slide {
-  min-width: 100%;
+  display: none;
   height: 100%;
   background-size: cover;
   background-position: center;
-  transition: transform 1s ease-in-out;
-  transform: translateX(100%);
-  opacity: 0;
   position: absolute;
+  width: 100%;
   top: 0;
   left: 0;
+  opacity: 0;
+  animation: fade 1.2s ease-in-out;
 }
 
 .slide.active {
-  transform: translateX(0);
+  display: block;
   opacity: 1;
-  z-index: 1;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .overlay {
@@ -41,71 +52,262 @@
 
 .overlay h2 {
   color: #fff;
-  font-size: 2rem;
+  font-size: 3rem;
+  font-weight: 600;
   text-align: center;
   padding: 0 1rem;
+  animation: slideInUp 1s ease-out;
 }
 
+@keyframes slideInUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
-.slide {
-  min-width: 100%;
-  height: 300px;
-  background: #0077cc;
-  color: white;
+/* Theme Toggle */
+.theme-toggle {
+  margin: 30px auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  scroll-snap-align: start;
+  gap: 12px;
+  font-size: 1rem;
 }
 
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 50px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px; width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.slider.round {
+  border-radius: 50px;
+}
+
+/* User Section */
 .user-section {
   display: flex;
-  gap: 2rem;
-  padding: 2rem;
-  background: #f0f0f0;
-  justify-content: space-evenly;
+  justify-content: center;
+  padding: 4rem 2rem;
+  flex-wrap: wrap;
+  gap: 30px;
+  background-color: #ffffff;
 }
 
-.user-section > div {
-  flex: 1;
-  padding: 1.5rem;
-  background: white;
+.job-poster, .job-seeker {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px 24px;
+  width: 320px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
   text-align: center;
-  border-radius: 10px;
+  animation: fadeInUp 1s ease;
+}
+
+.job-poster:hover, .job-seeker:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.user-section h3 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  color: #1c3d5a;
+}
+
+.user-section p {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 18px;
 }
 
 .user-section button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background: #0077cc;
+  background: linear-gradient(to right, #0077ff, #00c6ff);
   color: white;
+  padding: 10px 22px;
   border: none;
-  border-radius: 5px;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
+.user-section button:hover {
+  transform: scale(1.05);
+}
+
+/* Job Cards */
 .job-cards {
-  padding: 2rem;
+  padding: 60px 20px;
+  background: #f5faff;
+  text-align: center;
+}
+
+.job-cards h2 {
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+  color: #1b344c;
 }
 
 .card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
 }
 
 .card {
-  background: #fafafa;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  width: 300px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  text-align: left;
+  position: relative;
+  animation: fadeInUp 1s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card h4 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: #0077cc;
+}
+
+.card p {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 5px 0;
 }
 
 .card button {
-  margin-top: 1rem;
+  margin-top: 16px;
   background: #0077cc;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 10px 18px;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card button:hover {
+  background: #005fa3;
+  transform: scale(1.05);
+}
+
+/* View All Button */
+.view-all-btn {
+  margin-top: 40px;
+  background: transparent;
+  border: 2px solid #0077cc;
+  color: #0077cc;
+  padding: 10px 28px;
+  font-size: 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-all-btn:hover {
+  background-color: #0077cc;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* --- Dark Mode Styles --- */
+.homepage.dark {
+  background: linear-gradient(to bottom right, #111827, #1f2937);
+  color: #e5e7eb;
+}
+
+.homepage.dark .overlay h2,
+.homepage.dark .job-cards h2,
+.homepage.dark .user-section h3,
+.homepage.dark .user-section p,
+.homepage.dark .card p,
+.homepage.dark .card h4 {
+  color: #e5e7eb;
+}
+
+.homepage.dark .job-poster,
+.homepage.dark .job-seeker,
+.homepage.dark .card {
+  background-color: #1e293b;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.05);
+}
+
+.homepage.dark .view-all-btn {
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+.homepage.dark .view-all-btn:hover {
+  background-color: #60a5fa;
+  color: #111827;
+}
+
+.homepage.dark .user-section button,
+.homepage.dark .card button {
+  background: #3b82f6;
+}
+
+.homepage.dark .user-section button:hover,
+.homepage.dark .card button:hover {
+  background: #2563eb;
 }
