@@ -57,7 +57,7 @@ function JobPost() {
     const token = localStorage.getItem('token');
 
     if (!user || !user.roles || !user.roles.includes('recruiter')) {
-      alert('❌ You are not authorized to post a job. Please login as a recruiter.');
+      alert('You are not authorized to post a job. Please login as a recruiter.');
       return;
     }
 
@@ -80,7 +80,7 @@ function JobPost() {
 
       const result = await response.json();
       if (response.ok) {
-        alert("✅ Job posted successfully!");
+        alert(" Job posted successfully!");
         console.log(result.data);
       } else {
         alert(result.message || "Something went wrong.");

@@ -93,7 +93,7 @@ const Company = () => {
                 alt={`${company} logo`}
                 className="company-logo"
                 onError={(e) => {
-                  e.target.src = '/assets/defaultlogo.png'; // Fallback image on error
+                  e.target.src = '/assets/backrem.png'; // Fallback image on error
                 }}
               />
               <h3 className="company-name">{company}</h3>

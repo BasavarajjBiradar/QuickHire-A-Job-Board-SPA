@@ -37,7 +37,7 @@ const FilterGroup = ({ label, options, onChange, value }) => (
   </div>
 );
 
-// 🔥 Updated JobCard with onApply prop
+
 const JobCard = ({ job, index, onApply }) => (
   <div className="job-card" style={{ animationDelay: `${index * 0.1}s` }}>
     <h3>{job.title}</h3>
@@ -69,7 +69,7 @@ const Job = () => {
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user); // 🔥 Get user from Redux
+  const user = useSelector((state) => state.auth.user); 
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -141,7 +141,7 @@ const Job = () => {
     return options.filter(Boolean).map(item => ({ value: item, label: item }));
   };
 
-  // 🔥 Apply Now Handler
+  // Apply Now Handler
   const handleApply = (jobId) => {
     if (!user) {
       alert("Please login to apply for this job.");

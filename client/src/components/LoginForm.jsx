@@ -25,9 +25,9 @@ function LoginForm({ formData, handleInputChange, handleSubmit }) {
   //     const userData = response.data.user;
   //     const token = response.data.token;
 
-  //     localStorage.setItem('token', token);         // ✅ Store token
+  //     localStorage.setItem('token', token);      
   //     dispatch(setLogin(userData)); 
-  //     console.log('User:', userData)                // ✅ Set Redux user
+  //     console.log('User:', userData)                
   //     console.log('Login successful:', response.data);
 
   //     handleSubmit(e);
@@ -59,7 +59,7 @@ function LoginForm({ formData, handleInputChange, handleSubmit }) {
 
     localStorage.setItem('token', token); // Store token separately if needed
     localStorage.setItem('user', JSON.stringify(userData)); // Store full user info
-    dispatch(setLogin(userData)); // ✅ store in Redux
+    dispatch(setLogin(userData)); //store in Redux
     handleSubmit(e);
   } catch (error) {
     console.error('Login failed:', error);

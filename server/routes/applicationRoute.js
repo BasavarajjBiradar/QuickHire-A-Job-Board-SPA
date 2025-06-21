@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Application = require("../models/application");
 const mongoose = require("mongoose");
-const Job=require('../models/job')
-const User = require("../models/user");
+const Job=require('../models/job');
+const User = require("../models/User");
 // const applicationController = require('../controllers/applicationController');
 
 
@@ -152,3 +152,5 @@ router.patch("/applications/:applicationId/status", async (req, res) => {
 
 
 module.exports = router;
+
+
