@@ -1,7 +1,7 @@
 // src/redux/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-// Try to load user from localStorage
+// load user from localStorage
 const savedUser = JSON.parse(localStorage.getItem('user'));
 
 const initialState = {
